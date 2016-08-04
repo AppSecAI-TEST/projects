@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fi.aalto.itmc.mobilesensingcommon">
+
+    <permission-group android:label="@string/perm_group_label_mobile_sensing"
+        android:description="@string/perm_group_desc_mobile_sensing"
+        android:name="fi.aalto.itmc.permission-group.MOBILE_SENSING" />
+
+    <permission android:name="fi.aalto.itmc.permission.ACCESS_MOBILE_SENSING"
+        android:label="@string/perm_label_access_mobile_sensing"
+        android:description="@string/perm_desc_access_mobile_sensing"
+        android:permissionGroup="fi.aalto.itmc.permission-group.MOBILE_SENSING"
+        android:protectionLevel="signature" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+    </application>
+
+</manifest>

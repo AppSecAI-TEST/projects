@@ -1,0 +1,1 @@
+include ':mobilesensingapp', ':mobilesensingservice', ':mobilesensingcommon'

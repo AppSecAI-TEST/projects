@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sensing web</title>
+		<style>
+			html { height: 100% }
+			body { height: 100%; margin: 0; padding: 0; font-family:sans-serif; }
+			.ng-scope { height: 100%; }
+			heat-map div { height: 100%; width: 80%;  float: left; }
+			.gm-style div { height: auto; width: auto; }
+			#wifi-selector{ position: absolute; top:10%; right: 5%; z-index: 1000000;}
+			#threshold-selector{ position: absolute; top:20%; right: 5%; z-index: 1000000;}
+			#combo{ background-color: black; height: 100%; float: right; width: 20%;}
+		</style>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script src="libs/heatmap.js-amd/build/heatmap.js"></script>
+		<script src="libs/heatmap.js-amd/plugins/gmaps-heatmap.js"></script>
+		<script src="libs/angular/angular.min.js"></script>
+	</head>
+	<body>
+		<div ng-app="myApp">
+			<div ng-controller="MyController">
+				<div class="gm-style">
+					<select  id="wifi-selector" name="select" ng-model="selectedWifi" ng-change="wifiHasChanged()">
+						<option ng-repeat="option in availableWifi" value="{{option._id}}">{{option._id}}</option>
+					</select>
+				</div>
+
+				<div class="gm-style">
+					<select  id="threshold-selector" name="select" ng-model="selectedThreshold" ng-change="thresholdHasChanged()">
+						<option ng-repeat="option in availableThreshold" value="{{option}}">{{option}}</option>
+					</select>
+				</div>
+				<heat-map data="passed_data"></heat-map> 
+				<div id="combo">
+
+				</div>
+			</div>
+		</div>
+		<script>
+			var myApp = angular.module('myApp', []);
+
+			myApp
+					.controller('MyController', function ($scope, $http) {
+						$http.get('http://localhost:8081/api/wifi-names').success(function (data) {
+							$scope.availableWifi = data
+						});
+						$scope.availableThreshold = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+						
+						$scope.wifiHasChanged = function () {
+							$http.get('http://localhost:8081/api/wifi/' + $scope.selectedWifi).success(function (data) {
+								var points = []
+								maxValue = 0;
+								for (var i = 0; i < data.length; i++) {
+									if (data[i].location && data[i].location.Latitude && data[i].location.Longitude && data[i].wifi.Value) {
+										var p = {
+											lat: data[i].location.Latitude,
+											lng: data[i].location.Longitude,
+											value: data[i].wifi.Value
+										};
+										if (p.value > maxValue) {
+											maxValue = p.value;
+										}
+										points.push(p);
+									}
+								}
+								var data = {
+									max: maxValue,
+									data: points
+								};
+								$scope.fullData = data;
+								if ($scope.selectedThreshold) {
+									$scope.thresholdHasChanged();
+								} else {
+									heatmap.setData(data);
+								}
+								
+							});
+						};
+						$scope.thresholdHasChanged = function () {
+							if ($scope.fullData && $scope.fullData.data && $scope.fullData.data.length > 0) {
+								var filteredPoints = [];
+								maxValue = 0;
+								for (var i = 0; i < $scope.fullData.data.length; i++) {
+									var p = $scope.fullData.data[i];
+									if (p.value >= Number($scope.selectedThreshold)) {
+										filteredPoints.push(p);
+										if (p.value > maxValue) {
+											maxValue = p.value;
+										}
+									}
+								}
+								heatmap.setData({
+									max: maxValue,
+									data: filteredPoints
+								});
+							}
+						};
+					})
+					.directive('heatMap', function () {
+						return {
+							restrict: 'E',
+							scope: {
+								data: '='
+							},
+							template: '<div container></div>',
+							link: function (scope, ele, attr) {
+								// map center
+								var myLatlng = new google.maps.LatLng(60.188938, 24.834190);
+								// map options,
+								var myOptions = {
+									zoom: 14,
+									center: myLatlng
+								};
+								// standard map
+								map = new google.maps.Map(ele.find('div')[0], myOptions);
+								heatmap = new HeatmapOverlay(map,
+										{
+											"radius": 20,
+											"maxOpacity": 1,
+											"scaleRadius": false,
+											"useLocalExtrema": false,
+										}
+								);
+							}
+
+						};
+					})
+
+
+		</script>
+	</body>
+</html>

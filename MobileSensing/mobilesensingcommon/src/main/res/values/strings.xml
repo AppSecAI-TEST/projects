@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Mobile Sensing Common</string>
+    <string name="perm_group_label_mobile_sensing">Mobile sensing</string>
+    <string name="perm_group_desc_mobile_sensing">Mobile sensing information</string>
+    <string name="perm_label_access_mobile_sensing">Mobile sensing</string>
+    <string name="perm_desc_access_mobile_sensing">Allows the app to access mobile sensing service</string>
+
+    <string name="start_sensing_button_main_view">Start sensing</string>
+    <string name="stop_sensing_button_main_view">Stop sensing</string>
+    <string name="send_data_button_main_view">Reconnect and Send</string>
+    <string name="status_data_button_main_view">Status of data</string>
+    <string name="query_status_button_main_view">Query status</string>
+    <string name="status_not_available_text_view">Status not available</string>
+    <string name="active_sensors_text_view">No ready sensors</string>
+    <string name="sensor_rate_text_view">Select rate for collecting sensor data (seconds)</string>
+    <string name="sending_msg_rate_text_view">Select rate for sending data (seconds)</string>
+</resources>

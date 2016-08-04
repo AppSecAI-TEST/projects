@@ -1,0 +1,16 @@
+{
+  "name": "SensingWeb",
+  "version": "1.0.0",
+  "author": "Tomsu Radek",
+  "contributors": [],
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "method-override": "^2.3.6",
+    "mongoose": "^4.5.7",
+    "mqtt": "^1.13.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

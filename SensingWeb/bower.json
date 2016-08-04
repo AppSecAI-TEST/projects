@@ -1,0 +1,8 @@
+{
+    "name": "SensingWeb",
+    "version": "1.0.0",
+    "dependencies": {
+        "angular": "latest",
+		"heatmap.js-amd": "latest"
+    }
+}

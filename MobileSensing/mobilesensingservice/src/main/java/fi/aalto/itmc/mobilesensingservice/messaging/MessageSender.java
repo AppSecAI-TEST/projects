@@ -17,19 +17,24 @@ import fi.aalto.itmc.mobilesensingservice.sqlite.SensorDataDB;
  */
 public class MessageSender {
     static public void sendSensorData(Context context, Publisher publisher) {
-        long timestamp = MobileSensingCommon.getTimeNow();
+        long before = MobileSensingCommon.getTimeNow();
+        long after = 0;
         SensorDataDB db = SensorDataDB.getInstance(context);
-        List<String> messages = db.messagesBefore(timestamp);
-        if (messages.isEmpty()) {
-            Log.d("Message sender", "Nothing to send");
-            return;
+        while (true) {
+            List<String> messages = db.messagesBeforeAfter(before, after);
+            if (messages.isEmpty()) {
+                Log.d("Message sender", "Nothing to send");
+                return;
+            }
+            JSONArray jsonArray = JSONFormatter.parseListToJSONArray(messages);
+            String bundle = JSONFormatter.sensingBundle(jsonArray).toString();
+            after = JSONFormatter.parseLastTimestampFromString(bundle);
+            try {
+                publisher.publish(bundle.getBytes());
+            } catch (MqttException e) {
+                Log.e("Message sender", "Sending failed", e);
+            }
         }
-        JSONArray jsonArray = JSONFormatter.parseListToJSONArray(messages);
-        String bundle = JSONFormatter.sensingBundle(jsonArray).toString();
-        try {
-            publisher.publish(bundle.getBytes());
-        } catch (MqttException e) {
-            Log.e("Message sender", "Sending failed", e);
-        }
+
     }
 }

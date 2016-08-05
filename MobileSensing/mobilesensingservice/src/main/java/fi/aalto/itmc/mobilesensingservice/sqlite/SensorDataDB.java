@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.LinkedList;
 import java.util.List;
 
+import fi.aalto.itmc.mobilesensingcommon.MobileSensingCommon;
+
 /**
  * Created by laptop on 4/23/16.
  */
@@ -58,9 +60,11 @@ public class SensorDataDB extends SQLiteOpenHelper {
     }
 
 
-    public List<String> messagesBefore(long timestamp) {
+    public List<String> messagesBeforeAfter(long before, long after) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(SENSOR_TABLE_NAME, new String[]{KEY_MESSAGE}, KEY_TIMESTAMP + " <= ?", new String[]{String.valueOf(timestamp)}, null, null, null);
+        Cursor cursor = db.query(SENSOR_TABLE_NAME, new String[]{KEY_MESSAGE}, KEY_TIMESTAMP + " < ? AND " + KEY_TIMESTAMP + " > ?",
+                new String[]{String.valueOf(before), String.valueOf(after)},
+                null, null, KEY_TIMESTAMP + " ASC", MobileSensingCommon.LIMIT_ROWS_RESULT_DB);
 
         if (cursor != null) {
             LinkedList<String> res = new LinkedList<>();

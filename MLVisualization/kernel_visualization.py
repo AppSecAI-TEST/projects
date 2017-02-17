@@ -154,7 +154,7 @@ def transform_and_plot_data(seed, distance_matrix, dim_x, dim_y, title, plot3D, 
 
 
 def main():
-    plot3D = True
+    plot3D = False
     seed = np.random.RandomState(seed=99)
     xx,yy = create_mesh_data(-1, 1.01, 0.2, -1, 1.01, 0.2)
 

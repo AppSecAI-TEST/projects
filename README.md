@@ -20,3 +20,6 @@ MobileSensing and SensingWeb are linked projects combining Android device applic
 **SatellitesReactor** is a small project done for a competition. It uses standard Java with some Unit testing and some geometrics and Shortest path searching algorithm.
 
 **Collatz** is one page implementation of Collatz conjecture also for a competition or so.
+
+## ML projects
+**MLVisualization** is a visualization of data in kernel space projected back to 2D or 3D. Using linear, polynomial and RBF kernels.

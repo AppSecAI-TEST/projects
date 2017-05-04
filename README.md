@@ -23,3 +23,8 @@ MobileSensing and SensingWeb are linked projects combining Android device applic
 
 ## ML projects
 **MLVisualization** is a visualization of data in kernel space projected back to 2D or 3D. Using linear, polynomial and RBF kernels.
+
+## C++ projects
+**SatellitesCpp** is SatellitesReactor implemented in C++ with few changes compared to Java version.
+
+**ParCpp** are two code snippets made for parallel programming class. Bodies of functions stay unchanged. First.cu uses CUDA, Second.cc uses OpenMP directives and Vector instructions. 
